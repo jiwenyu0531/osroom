@@ -102,7 +102,7 @@ if __name__ == '__main__':
     if "--debug" not in sys.argv and "-D" not in sys.argv:
         # 更新python第三方类库
         print(" * Check or update Python third-party libraries")
-        update_pylib(input_venv_path=False)
+        #update_pylib(input_venv_path=False)
     else:
         print(" * Using --debug, the system will not check Python dependencies")
 

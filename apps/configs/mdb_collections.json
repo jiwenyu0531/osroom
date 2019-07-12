@@ -269,7 +269,12 @@
             "content": "<class 'str'>",
             "update_time": "<class 'float'>",
             "title": "<class 'str'>",
-            "reviewed_score": "<class 'int'>"
+            "reviewed_score": "<class 'int'>",
+            "type": "<class 'str'>",
+            "attribute": "<class 'dict'>",
+            "word_cloud": "<class 'str'>",
+            "vocabulary": "<class 'list'>"
+
         },
         "tempfile": {},
         "msg_code": {},
