@@ -233,6 +233,24 @@
             if(vue.post.editor=="markdown"){
                 vue.post.content = marked(vue.post.content);
             }
+            //add extra logic to replacing the \n
+            vue.post.content = vue.post.content.replace(/[\n\r]/g,'<br>');
+            var pre_text = "";
+            if(vue.post.attribute != null)
+            {
+                pre_text = "Singer: "+ vue.post.attribute.singer + "<br>";
+                pre_text = pre_text + "Album: "+ vue.post.attribute.album + "<br>";
+                pre_text = pre_text + "Issue year: "+ vue.post.attribute.issue_year + "<br><br>";
+                vue.post.content = pre_text + vue.post.content;
+            }
+            // display the word cloud image
+            if(vue.post.word_cloud != null)
+            {
+                var tmp_str = "<p><img src="+vue.post.word_cloud+"><br></p>";
+                vue.post.content = tmp_str + vue.post.content;
+            }
+
+
 
             history_state(vue.post.title+"-{{g.site_global.site_config.TITLE_SUFFIX}}");
         }).catch(function (r){

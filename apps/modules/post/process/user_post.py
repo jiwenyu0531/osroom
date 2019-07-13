@@ -15,12 +15,14 @@ from apps.utils.text_parsing.text_parsing import richtext_extract_img
 from apps.app import mdbs
 from apps.core.utils.get_config import get_config
 from apps.utils.validation.str_format import content_attack_defense
+from apps.utils.word_cloud_gen.word_cloud_gen import word_cloud_gen_per_frequency, get_frequency_for_txt
+import datetime
+import re
 
 __author__ = "Allen Woo"
 
 
 def post_issue():
-
     tid = request.argget.all('id')
     title = request.argget.all('title', "").strip()
     content = request.argget.all('content', "")
@@ -85,6 +87,18 @@ def post_issue():
             issue_way = 1
         else:
             issue_way = 0
+
+        # 统计单词
+        txt_frequency = get_frequency_for_txt(content_text)
+        # extract top 20 words
+        vocabulary = list(txt_frequency.keys())[0:20]
+
+        # 处理word cloud
+        wc_file_name = datetime.date.today().strftime('%Y%m%d') \
+                       + '-' \
+                       + re.sub('[^a-zA-Z0-9]', '', title.strip()) \
+                       + '.png'
+        word_cloud = word_cloud_gen_per_frequency(txt_frequency, 'word_cloud/' + wc_file_name)
         # 获取已上传的文章图片
         old_imgs = []
         if tid:
@@ -122,6 +136,9 @@ def post_issue():
 
         if not cover_url and len(imgs) > 0:
             cover_url = imgs[0]
+        elif not cover_url and len(imgs) == 0:
+            # 用word cloud 图片作为封面图
+            cover_url = word_cloud
 
         if issue_way:
             r = content_inspection_text(
@@ -151,6 +168,7 @@ def post_issue():
             audit_way = "auto"
         content = content_attack_defense(content)["content"]
         brief_content = content_attack_defense(brief_content)["content"]
+
         post = {
             "title": title.strip(),
             "content": content.strip(),
@@ -168,12 +186,16 @@ def post_issue():
             "word_num": text_l,
             "is_delete": 0,
             "imgs": imgs,
-            "cover_url": cover_url
+            "cover_url": cover_url,
+            "word_cloud": word_cloud,
+            "vocabulary": vocabulary,
+            "attribute": {},
+            "type": "subtitle"
         }
 
         if tid:
             mdbs["web"].db.post.update_one({"_id": ObjectId(tid), "user_id": current_user.str_id}, {
-                                       "$set": post}, upsert=True)
+                "$set": post}, upsert=True)
         else:
             post["comment_num"] = 0
             post["like"] = 0
@@ -209,7 +231,6 @@ def post_issue():
 
 
 def post_delete():
-
     ids = json_to_pyseq(request.argget.all('ids', []))
     recycle = int(request.argget.all('recycle', 1))
 
@@ -223,8 +244,8 @@ def post_delete():
     for i, tid in enumerate(ids):
         ids[i] = ObjectId(tid)
     r = mdbs["web"].db.post.update_one({"_id": {"$in": ids},
-                                    "user_id": current_user.str_id},
-                                   {"$set": {"is_delete": is_delete}})
+                                        "user_id": current_user.str_id},
+                                       {"$set": {"is_delete": is_delete}})
     if r.modified_count:
         data = {"msg": gettext("{},{}").format(msg, r.modified_count),
                 "msg_type": "s", "custom_status": 201}
@@ -237,7 +258,6 @@ def post_delete():
 
 
 def post_restore():
-
     ids = json_to_pyseq(request.argget.all('ids', []))
     if not isinstance(ids, list):
         ids = json.loads(ids)
@@ -245,9 +265,9 @@ def post_restore():
         ids[i] = ObjectId(tid)
 
     r = mdbs["web"].db.post.update_one({"_id": {"$in": ids},
-                                    "user_id": current_user.str_id,
-                                    "is_delete": 1},
-                                   {"$set": {"is_delete": 0}})
+                                        "user_id": current_user.str_id,
+                                        "is_delete": 1},
+                                       {"$set": {"is_delete": 0}})
     if r.modified_count:
         data = {"msg": gettext("Restore success,{}").format(r.modified_count),
                 "msg_type": "s", "custom_status": 201}
