@@ -9,6 +9,7 @@ import time
 from apps.core.flask.reqparse import arg_verify
 from apps.modules.message.process.user_message import insert_user_msg
 from apps.modules.upload.process.tempfile import clean_tempfile
+from apps.modules.translations.process.baidu_translator import BaiduTranslator
 from apps.utils.content_evaluation.content import content_inspection_text
 from apps.utils.format.obj_format import json_to_pyseq
 from apps.utils.text_parsing.text_parsing import richtext_extract_img
@@ -169,6 +170,12 @@ def post_issue():
         content = content_attack_defense(content)["content"]
         brief_content = content_attack_defense(brief_content)["content"]
 
+        # 处理翻译 - 临时方案
+        trans = BaiduTranslator()
+        sents = str(content).split('\n')
+        s, r = trans.text_translate(content, 'en', 'zh')
+        if s:
+            content = content + r
         post = {
             "title": title.strip(),
             "content": content.strip(),
@@ -190,7 +197,7 @@ def post_issue():
             "word_cloud": word_cloud,
             "vocabulary": vocabulary,
             "attribute": {},
-            "type": "subtitle"
+            "type": "translations"
         }
 
         if tid:
@@ -198,6 +205,7 @@ def post_issue():
                 "$set": post}, upsert=True)
         else:
             post["comment_num"] = 0
+            post["translation_num"] = 0
             post["like"] = 0
             post["like_user_id"] = []
             post["user_id"] = current_user.str_id

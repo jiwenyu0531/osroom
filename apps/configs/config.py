@@ -105,6 +105,53 @@ CONFIG = {
             "info": "评论开关,是否打开评论功能?"
         }
     },
+    "translation": {
+        "TRAVELER_TRANSLATION": {
+            "sort": 99,
+            "value": False,
+            "type": "bool",
+            "info": "游客翻译开关,是否打开?"
+        },
+        "NUM_PAGE": {
+            "sort": 99,
+            "value": 10,
+            "type": "int",
+            "info": "每个页面获取几条翻译, 如果请求获取评论时指定了指定了per参数, 则此配置无效(此配置也对管理端无效)"
+        },
+        "__restart__": "not_must",
+        "__info__": "评论内容设置",
+        "INTERVAL": {
+            "sort": 99,
+            "value": 30,
+            "type": "int",
+            "info": "控制翻译频繁度时间(s)"
+        },
+        "__sort__": 3,
+        "MAX_LEN": {
+            "sort": 99,
+            "value": 50000,
+            "type": "int",
+            "info": "发布字幕最多几个字符"
+        },
+        "NUM_OF_INTERVAL": {
+            "sort": 99,
+            "value": 3,
+            "type": "int",
+            "info": "控制翻译频繁度时间内最多评论几次"
+        },
+        "NUM_PAGE_MAX": {
+            "sort": 99,
+            "value": 30,
+            "type": "int",
+            "info": "每个页面最多获取几条翻译(此配置对管理端无效)"
+        },
+        "OPEN_TRANSLATION": {
+            "sort": 99,
+            "value": False,
+            "type": "bool",
+            "info": "评论开关,是否打开翻译功能?"
+        }
+    },
     "category": {
         "CATEGORY_TYPE": {
             "sort": 99,
@@ -147,7 +194,7 @@ CONFIG = {
         "__sort__": 2,
         "MAX_LEN": {
             "sort": 99,
-            "value": 5000,
+            "value": 50000,
             "type": "int",
             "info": "发布文章最多几个字符"
         },
@@ -721,7 +768,8 @@ CONFIG = {
                 "ogg",
                 "zip",
                 "gzip",
-                "tar"
+                "tar",
+                "srt"
             ],
             "type": "list",
             "info": "上传:允许上传的文件后缀(全部小写),每个用英文的','隔开"

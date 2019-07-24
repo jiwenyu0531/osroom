@@ -31,7 +31,7 @@ class Transations:
             "<output directory>, Output directory.Optional: admin_pages, python-pg, theme",
         ]
         l_opexplain = [
-            "init translation(初始化翻译)",
+            "init translations(初始化翻译)",
             "Update: Extract and update(用于更新,提取最新的需翻译文本)",
             "compile(更新并翻译后,需要发布翻译)",
             "<cfg file path>, The default:{}(只提取html,js文件)."
@@ -133,7 +133,7 @@ class Transations:
         if not os.path.exists(po_filepath):
             print(po_filepath)
             raise Exception(
-                "Missing messages.po file, please reinitialize translation. -h")
+                "Missing messages.po file, please reinitialize translations. -h")
         if not self.quiet:
             self.redirect = ""
 

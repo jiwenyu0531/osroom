@@ -40,6 +40,14 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% if current_user.page_permission_check(["/osr-admin/translation"])%}
+                    <li>
+                        <a href="/osr-admin/translation">
+                            <i class="fa fa-file-text-o"></i>
+                            <span>{{_("翻译管理")}}</span>
+                        </a>
+                    </li>
+                    {% endif %}
                     {% if current_user.page_permission_check(["/osr-admin/comment"])%}
                     <li>
                         <a href="/osr-admin/comment">

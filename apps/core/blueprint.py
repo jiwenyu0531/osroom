@@ -31,6 +31,7 @@ routing_moudel = [
     {"from": "apps.modules.category.apis", "import": ["category", "adm_category", "theme_category"]},
     {"from": "apps.modules.post.apis", "import": ["post", "user_post", "adm_post"]},
     {"from": "apps.modules.comments.apis", "import": ["comment", "amd_comment"]},
+    {"from": "apps.modules.translations.apis", "import": ["translation", "adm_translation"]},
     {"from": "apps.modules.verification_code.apis", "import": ["code"]},
     {"from": "apps.modules.setting.apis", "import": ["settings", "get_file_log",
                                                      "host_setting", "session_set"]},
