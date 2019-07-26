@@ -17,6 +17,7 @@ from apps.app import mdbs
 from apps.core.utils.get_config import get_config
 from apps.utils.validation.str_format import content_attack_defense
 from apps.utils.word_cloud_gen.word_cloud_gen import word_cloud_gen_per_frequency, get_frequency_for_txt
+from apps.utils.subtitle_parser.subtitle_parser import get_subtitle_content
 import datetime
 import re
 
@@ -33,6 +34,8 @@ def post_issue():
     tags = json_to_pyseq(request.argget.all('tags', []))
     issue_way = request.argget.all('issue_way', 'issue')
     cover_url = request.argget.all('cover_url')
+    subtitle_name = request.argget.all('subtitle_name', "")
+    subtitle_url = request.argget.all('subtitle_url', "")
 
     # 标签处理验证
     tag_max_num = get_config("post", "TAG_MAX_NUM")
@@ -89,9 +92,21 @@ def post_issue():
         else:
             issue_way = 0
 
+        # 处理上传的字幕文件
+        subtitle_files = []
+        if subtitle_name and subtitle_url:
+            subtitle_files.append({"name": subtitle_name, "url": subtitle_url})
+        subtitle_conent = []
+        if subtitle_url:
+            subtitle_conent = get_subtitle_content(subtitle_url)
         # 统计单词
-        txt_frequency = get_frequency_for_txt(content_text)
+        subtitle_text = ''
+        if subtitle_conent:
+            subtitle_text = [line['text'] for line in subtitle_conent]
+            subtitle_text = ' '.join(subtitle_text)
+        txt_frequency = get_frequency_for_txt(subtitle_text)
         # extract top 20 words
+        # todo  - 需要排序，现在是随机的
         vocabulary = list(txt_frequency.keys())[0:20]
 
         # 处理word cloud
@@ -100,6 +115,7 @@ def post_issue():
                        + re.sub('[^a-zA-Z0-9]', '', title.strip()) \
                        + '.png'
         word_cloud = word_cloud_gen_per_frequency(txt_frequency, 'word_cloud/' + wc_file_name)
+
         # 获取已上传的文章图片
         old_imgs = []
         if tid:
@@ -171,11 +187,11 @@ def post_issue():
         brief_content = content_attack_defense(brief_content)["content"]
 
         # 处理翻译 - 临时方案
-        trans = BaiduTranslator()
-        sents = str(content).split('\n')
-        s, r = trans.text_translate(content, 'en', 'zh')
-        if s:
-            content = content + r
+        # trans = BaiduTranslator()
+        # sents = str(content).split('\n')
+        # s, r = trans.text_translate(content, 'en', 'zh')
+        # if s:
+        #    content = content + r
         post = {
             "title": title.strip(),
             "content": content.strip(),
@@ -196,8 +212,10 @@ def post_issue():
             "cover_url": cover_url,
             "word_cloud": word_cloud,
             "vocabulary": vocabulary,
+            "subtitle_content": subtitle_conent,
+            "subtitle_files": subtitle_files,
             "attribute": {},
-            "type": "translations"
+            "type": "subtitle"
         }
 
         if tid:

@@ -39,6 +39,7 @@ def api_file_upload():
     return_error = request.argget.all('return_error', "error")
     prefix = request.argget.all('prefix', "generic/")
     save_temporary_url = request.argget.all('save_temporary_url', 1)
+    file_type = request.argget.all('file_type', 'image')
 
     data = file_upload(
         return_url_key=return_url_key,
@@ -46,5 +47,6 @@ def api_file_upload():
         return_success=return_success,
         return_error=return_error,
         save_temporary_url=save_temporary_url,
+        file_type=file_type,
         prefix=prefix)
     return response_format(data)

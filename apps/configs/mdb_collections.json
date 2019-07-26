@@ -274,7 +274,9 @@
             "type": "<class 'str'>",
             "attribute": "<class 'dict'>",
             "word_cloud": "<class 'str'>",
-            "vocabulary": "<class 'list'>"
+            "vocabulary": "<class 'list'>",
+            "subtitle_content": "<class 'list'>",
+            "subtitle_files": "<class 'list'>"
 
         },
         "translation": {

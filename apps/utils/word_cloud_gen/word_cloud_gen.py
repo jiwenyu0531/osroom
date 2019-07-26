@@ -9,8 +9,8 @@ from apps.configs.sys_config import STATIC_PATH, APPS_PATH
 from apps.core.utils.get_config import get_config
 
 
-def get_frequency_for_txt(sentence):
-    text_list = nltk.word_tokenize(sentence)
+def get_frequency_for_txt(text):
+    text_list = nltk.word_tokenize(text)
     # 去掉标点符号,     # all to lower case
     english_punctuations = [',', '.', ':', ';', '?', '(', ')', '[', ']', '&', '!', '*', '@', '#', '$', '%']
 
