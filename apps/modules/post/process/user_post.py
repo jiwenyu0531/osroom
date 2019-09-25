@@ -186,12 +186,6 @@ def post_issue():
         content = content_attack_defense(content)["content"]
         brief_content = content_attack_defense(brief_content)["content"]
 
-        # 处理翻译 - 临时方案
-        # trans = BaiduTranslator()
-        # sents = str(content).split('\n')
-        # s, r = trans.text_translate(content, 'en', 'zh')
-        # if s:
-        #    content = content + r
         post = {
             "title": title.strip(),
             "content": content.strip(),
@@ -253,6 +247,12 @@ def post_issue():
                 "msg": gettext("Save success"),
                 "msg_type": "s",
                 "custom_status": 201}
+        # 如果发布成功- 将发布的信息放到待翻译的队列里面
+        if issue_way:
+            mdbs["web"].db.to_translate_queue.update_one({"_id": ObjectId(tid)},
+                                                         {"post_time": issue_time,
+                                                          "status": "todo"},
+                                                         upsert=True)
     return data
 
 

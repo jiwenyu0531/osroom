@@ -280,8 +280,9 @@
 
         },
         "translation": {
-            "target_brief_info": "<class 'str'>",
-            "username": "<class 'str'>",
+            "user_id": "<class 'str'>",
+            "user_name": "<class 'str'>",
+            "email": "<class 'NoneType'>",
             "audit_user_id": "<class 'NoneType'>",
             "is_delete": "<class 'int'>",
             "type": "<class 'str'>",
@@ -289,14 +290,12 @@
             "audit_label": "<class 'str'>",
             "like": "<class 'int'>",
             "word_num": "<class 'int'>",
-            "email": "<class 'NoneType'>",
             "like_user_id": "<class 'list'>",
-            "user_id": "<class 'str'>",
             "issued": "<class 'int'>",
             "audited": "<class 'int'>",
             "audit_score": "<class 'int'>",
             "issue_time": "<class 'float'>",
-            "content": "<class 'str'>",
+            "content": "<class 'list'>",
             "from_lang": "<class 'str'>",
             "to_lang": "<class 'str'>",
             "target_id": "<class 'str'>"
@@ -307,6 +306,28 @@
             "type": "<class 'str'>",
             "name": "<class 'str'>",
             "user_id": "<class 'int'>"
+        },
+        "to_translate_queue": {
+            "post_id": "<class 'str'>",
+            "post_time": "<class 'datetime.datetime'>",
+            "status": "<class 'str'>",
+            "processed_time": "<class 'datetime.datetime'>"
+        },
+        "sentence": {
+            "input": "<class 'str'>",
+            "from_lang": "<class 'str'>",
+            "to_lang": "<class 'str'>",
+            "output": "<class 'str'>",
+            "source": "<class 'str'>",
+            "frequency": "<class 'int'>"
+        },
+        "vocabulary": {
+            "input": "<class 'str'>",
+            "from_lang": "<class 'str'>",
+            "to_lang": "<class 'str'>",
+            "output": "<class 'str'>",
+            "source": "<class 'str'>",
+            "frequency": "<class 'int'>"
         }
     }
 }
